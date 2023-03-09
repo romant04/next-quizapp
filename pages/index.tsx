@@ -2,57 +2,41 @@ import Head from "next/head";
 import clientPromise from "../lib/mongodb";
 import { InferGetServerSidePropsType } from "next";
 import { useSession, signIn, signOut } from "next-auth/react";
+import Login from "../components/login";
 
 export async function getServerSideProps() {
-  try {
-    await clientPromise;
-    // `await clientPromise` will use the default database passed in the MONGODB_URI
-    // However you can use another database (e.g. myDatabase) by replacing the `await clientPromise` with the following code:
-    //
-    // `const client = await clientPromise`
-    // `const db = client.db("myDatabase")`
-    //
-    // Then you can execute queries against your database like so:
-    // db.find({}) or any of the MongoDB Node Driver commands
+    try {
+        await clientPromise;
+        // `await clientPromise` will use the default database passed in the MONGODB_URI
+        // However you can use another database (e.g. myDatabase) by replacing the `await clientPromise` with the following code:
+        //
+        // `const client = await clientPromise`
+        // `const db = client.db("myDatabase")`
+        //
+        // Then you can execute queries against your database like so:
+        // db.find({}) or any of the MongoDB Node Driver commands
 
-    return {
-      props: { isConnected: true },
-    };
-  } catch (e) {
-    console.error(e);
-    return {
-      props: { isConnected: false },
-    };
-  }
+        return {
+            props: { isConnected: true },
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            props: { isConnected: false },
+        };
+    }
 }
 
 export default function Home({
-  isConnected,
+    isConnected,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { data: session } = useSession();
-  if (session) {
     return (
-      <>
-        Signed in as {session.user?.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
+        <div>
+            <Head>
+                <title>Quizapp - Home</title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <h1 className="text-5xl text-center text-red-500">Neco</h1>
+        </div>
     );
-  }
-  return (
-    <>
-      Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
-    </>
-  );
-
-  return (
-    <div className="container">
-      <Head>
-        <title>Quizapp - Home</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <h1 className="text-5xl text-center text-red-500">Neco</h1>
-    </div>
-  );
 }
