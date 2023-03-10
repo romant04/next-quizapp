@@ -15,7 +15,7 @@ function Login() {
         return (
             <div>
                 <button
-                    className="px-6 py-1 rounded-md text-md hover:text-yellow-300"
+                    className="bg-white px-10 py-2 rounded-xl font-semibold text-black text-md hover:bg-yellow-400 transition-all duration-200 ease-out"
                     onClick={() => signIn()}
                 >
                     Sign in

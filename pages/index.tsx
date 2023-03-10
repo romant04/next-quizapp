@@ -1,8 +1,6 @@
 import Head from "next/head";
 import clientPromise from "../lib/mongodb";
 import { InferGetServerSidePropsType } from "next";
-import { useSession, signIn, signOut } from "next-auth/react";
-import Login from "../components/login";
 
 export async function getServerSideProps() {
     try {
@@ -34,7 +32,7 @@ export default function Home({
         <div>
             <Head>
                 <title>Quizapp - Home</title>
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/icon.png" />
             </Head>
             <h1 className="text-5xl text-center text-red-500">Neco</h1>
         </div>
