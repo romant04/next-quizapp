@@ -1,6 +1,8 @@
 import Head from "next/head";
 import dbConnect from "../../lib/mongodb";
 import Goal from "../../models/Goal";
+import Quizcard from "../components/Quizcard";
+import { Genre } from "../../types/types";
 
 interface IGoal {
     text: string;
@@ -34,7 +36,9 @@ export default function Home({ goals }: Prop) {
                 <title>Quizapp - Home</title>
                 <link rel="icon" href="/icon.png" />
             </Head>
-            <h1 className="text-5xl text-center text-red-500">Neco</h1>
+            <div className="flex flex-col items-center justify-center w-full gap-6">
+                <Quizcard text="Roman's quiz" genre={Genre.Coding} />
+            </div>
         </div>
     );
 }
