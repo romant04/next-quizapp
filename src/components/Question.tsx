@@ -1,15 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { setChecked, uncheck } from "../app/questionSlice";
 
 type Props = {
     multiple: boolean;
     text: string;
+    id: number;
 };
 
-function Question({ multiple, text }: Props) {
-    const [checked, setChecked] = useState(false);
+function Question({ multiple, text, id }: Props) {
+    const dispatch = useAppDispatch();
+    const [checkedQ, setCheckedQ] = useState(false);
+    const canBeChecked = useAppSelector((state) => state.question.checked);
+
+    useEffect(() => {
+        if (!canBeChecked?.includes(id)) {
+            setCheckedQ(false);
+        }
+    }, [canBeChecked]);
 
     function handleClick() {
-        setChecked(!checked);
+        if (checkedQ) {
+            dispatch(uncheck(id));
+            setCheckedQ(false);
+        } else {
+            setCheckedQ(true);
+            dispatch(setChecked(id));
+        }
     }
 
     return (
@@ -17,11 +34,11 @@ function Question({ multiple, text }: Props) {
             onClick={() => handleClick()}
             className={`flex flex-row bg-gray-500 p-3 gap-4 items-center cursor-pointer rounded-md ${
                 !multiple && "p-4"
-            } ${!checked ? "hover:bg-gray-700" : "hover:bg-yellow-700 bg-yellow-600"}`}
+            } ${!checkedQ ? "hover:bg-gray-700" : "hover:bg-yellow-700 bg-yellow-600"}`}
         >
             {multiple && (
-                <div className="flex justify-center items-center w-8 h-8 border-solid border-white border-2">
-                    {checked && <p className="text-3xl mb-2">x</p>}
+                <div className="flex items-center justify-center w-8 h-8 border-2 border-white border-solid">
+                    {checkedQ && <p className="mb-2 text-3xl">x</p>}
                 </div>
             )}
             <p>{text}</p>
