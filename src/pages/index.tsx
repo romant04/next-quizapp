@@ -4,26 +4,12 @@ import Quiz from "../../models/Quiz";
 import Quizcard from "../components/Quizcard";
 import { Genre } from "../../types/types";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
-
-interface IQuiz {
-    _id: string;
-    title: string;
-    questions: {
-        q1: string;
-        q2: string;
-        q3: string | null;
-        q4: string | null;
-        correctAnswers: number[];
-    }[];
-    genre: string | null;
-    owner: string;
-}
+import { IQuiz } from "../../types/types";
 
 export async function getServerSideProps() {
-    await dbConnect();
-    console.log("Database connected succesfuly");
-    /*
+  await dbConnect();
+  console.log("Database connected succesfuly");
+  /*
     const res = await fetch("http://localhost:3000/api/quiz/add", {
         method: "POST",
         headers: {
@@ -46,41 +32,41 @@ export async function getServerSideProps() {
     });
     console.log(res);*/
 
-    /* find all the data in our database */
-    const result = await Quiz.find({});
-    const quizzes = result.map((doc) => {
-        const quiz = doc.toObject();
-        quiz._id = quiz._id.toString();
-        return quiz as IQuiz;
-    });
+  /* find all the data in our database */
+  const result = await Quiz.find({});
+  const quizzes = result.map((doc) => {
+    const quiz = doc.toObject();
+    quiz._id = quiz._id.toString();
+    return quiz as IQuiz;
+  });
 
-    return { props: { quizzes: JSON.parse(JSON.stringify(quizzes)) } };
+  return { props: { quizzes: JSON.parse(JSON.stringify(quizzes)) } };
 }
 
 type Prop = {
-    quizzes: IQuiz[];
+  quizzes: IQuiz[];
 };
 
 export default function Home({ quizzes }: Prop) {
-    const { data: session } = useSession();
+  const { data: session } = useSession();
 
-    console.log(quizzes);
-    return (
-        <div>
-            <Head>
-                <title>Quizapp - Home</title>
-                <link rel="icon" href="/icon.png" />
-            </Head>
-            <div className="flex flex-col items-center justify-center w-full gap-6">
-                {quizzes?.map((quiz) => (
-                    <Quizcard
-                        key={quiz._id}
-                        id={quiz._id}
-                        text={quiz.title}
-                        genre={quiz.genre ? (quiz.genre as Genre) : Genre.Other}
-                    />
-                ))}
-            </div>
-        </div>
-    );
+  console.log(quizzes);
+  return (
+    <div>
+      <Head>
+        <title>Quizapp - Home</title>
+        <link rel="icon" href="/icon.png" />
+      </Head>
+      <div className="quizGrid">
+        {quizzes?.map((quiz) => (
+          <Quizcard
+            key={quiz._id}
+            id={quiz._id}
+            text={quiz.title}
+            genre={quiz.genre ? (quiz.genre as Genre) : Genre.Other}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
