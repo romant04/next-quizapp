@@ -1,14 +1,14 @@
-import Head from "next/head";
-import dbConnect from "../../lib/mongodb";
-import Quiz from "../../models/Quiz";
-import Quizcard from "../components/Quizcard";
-import { Genre } from "../../types/types";
-import { useSession } from "next-auth/react";
-import { IQuiz } from "../../types/types";
+import Head from 'next/head'
+import dbConnect from '../../lib/mongodb'
+import Quiz from '../../models/Quiz'
+import Quizcard from '../components/Quizcard'
+import { Genre } from '../../types/types'
+import { useSession } from 'next-auth/react'
+import { IQuiz } from '../../types/types'
 
 export async function getServerSideProps() {
-  await dbConnect();
-  console.log("Database connected succesfuly");
+  await dbConnect()
+  console.log('Database connected succesfuly')
   /*
     const res = await fetch("http://localhost:3000/api/quiz/add", {
         method: "POST",
@@ -33,24 +33,24 @@ export async function getServerSideProps() {
     console.log(res);*/
 
   /* find all the data in our database */
-  const result = await Quiz.find({});
+  const result = await Quiz.find({})
   const quizzes = result.map((doc) => {
-    const quiz = doc.toObject();
-    quiz._id = quiz._id.toString();
-    return quiz as IQuiz;
-  });
+    const quiz = doc.toObject()
+    quiz._id = quiz._id.toString()
+    return quiz as IQuiz
+  })
 
-  return { props: { quizzes: JSON.parse(JSON.stringify(quizzes)) } };
+  return { props: { quizzes: JSON.parse(JSON.stringify(quizzes)) } }
 }
 
 type Prop = {
-  quizzes: IQuiz[];
-};
+  quizzes: IQuiz[]
+}
 
 export default function Home({ quizzes }: Prop) {
-  const { data: session } = useSession();
+  const { data: session } = useSession()
 
-  console.log(quizzes);
+  console.log(quizzes)
   return (
     <div>
       <Head>
@@ -68,5 +68,5 @@ export default function Home({ quizzes }: Prop) {
         ))}
       </div>
     </div>
-  );
+  )
 }

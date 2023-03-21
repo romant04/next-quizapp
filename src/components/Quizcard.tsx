@@ -1,26 +1,26 @@
-import React from "react";
-import Image from "next/image";
-import { Genre } from "../../types/types";
-import Link from "next/link";
+import React from 'react'
+import Image from 'next/image'
+import { Genre } from '../../types/types'
+import Link from 'next/link'
 
 type Props = {
-  text: string;
-  genre: Genre;
-  id: string;
-};
+  text: string
+  genre: Genre
+  id: string
+}
 
 function Quizcard({ text, genre, id }: Props) {
   return (
-    <div className="flex flex-col items-center justify-center gap-5 py-5 bg-gray-500 rounded-md w-80 w-full">
+    <div className="flex flex-col items-center justify-center w-full gap-5 py-5 bg-gray-500 rounded-md w-80">
       <Image
         src={
           genre === Genre.Coding
-            ? "/coding.png"
+            ? '/coding.png'
             : genre === Genre.Gaming
-            ? "/joy.png"
+            ? '/joy.png'
             : genre === Genre.Math
-            ? "/math.png"
-            : "/slot.png"
+            ? '/math.png'
+            : '/slot.png'
         }
         alt=""
         width={128}
@@ -36,7 +36,7 @@ function Quizcard({ text, genre, id }: Props) {
         </button>
       </Link>
     </div>
-  );
+  )
 }
 
-export default Quizcard;
+export default Quizcard
