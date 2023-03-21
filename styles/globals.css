@@ -17,6 +17,13 @@ body {
     grid-auto-rows: 320px;
 }
 
+.customModal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
 .lds-ring {
     display: inline-block;
     position: absolute;
