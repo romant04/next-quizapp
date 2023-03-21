@@ -10,27 +10,43 @@ export async function getServerSideProps() {
   await dbConnect()
   console.log('Database connected succesfuly')
   /*
-    const res = await fetch("http://localhost:3000/api/quiz/add", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
+  const res = await fetch('http://localhost:3000/api/quiz/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      title: 'Insane quiz',
+      questions: [
+        {
+          q: 'How are you doing today ?',
+          a1: 'fine',
+          a2: 'awesome',
+          a3: 'could be better',
+          a4: "couldn't be worse",
+          correctAnswers: [1, 2, 3, 4],
         },
-        body: JSON.stringify({
-            title: "randomQuestion",
-            questions: [
-                {
-                    q: "How are you doing today ?",
-                    a1: "fine",
-                    a2: "awesome",
-                    a3: "could be better",
-                    a4: "couldn't be worse",
-                    correctAnswers: [1, 2, 3, 4],
-                },
-            ],
-            owner: "roman.tarnai.04@gmail.com",
-        }),
-    });
-    console.log(res);*/
+        {
+          q: 'Which colors does Ukrainian flag consists of ?',
+          a1: 'red',
+          a2: 'blue',
+          a3: 'white',
+          a4: 'yellow',
+          correctAnswers: [2, 4],
+        },
+        {
+          q: 'Jak se říká samici kraba ?',
+          a1: 'krabčice',
+          a2: 'neříká',
+          a3: 'krabice',
+          a4: 'krabička',
+          correctAnswers: [3],
+        },
+      ],
+      owner: 'roman.tarnai.04@gmail.com',
+    }),
+  })
+  console.log(res)*/
 
   /* find all the data in our database */
   const result = await Quiz.find({})
