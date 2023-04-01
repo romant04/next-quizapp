@@ -3,7 +3,12 @@ import React, { useEffect, useState } from 'react'
 import Question from '../../components/Question'
 import { IQuiz } from '../../../types/types'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { setMultiple } from '../../app/questionSlice'
+import {
+  renewChecked,
+  resetChecked,
+  setMultiple,
+  setPage,
+} from '../../app/questionSlice'
 
 function Quiz() {
   const router = useRouter()
@@ -34,6 +39,17 @@ function Quiz() {
   }
 
   useEffect(() => {
+    dispatch(setPage(questionId))
+    if (pageAnswers?.filter((f) => f.page == questionId)[0]?.answers) {
+      dispatch(
+        renewChecked(
+          pageAnswers?.filter((f) => f.page == questionId)[0]?.answers
+        )
+      )
+    }
+  }, [questionId])
+
+  useEffect(() => {
     dispatch(setMultiple(multiple as boolean))
   }, [multiple])
 
@@ -45,6 +61,7 @@ function Quiz() {
   function handleBtnPrev() {
     if (questionId > 0) {
       setQuestionId(questionId - 1)
+      dispatch(resetChecked())
     }
   }
 
@@ -52,6 +69,7 @@ function Quiz() {
     const maxCount: number = quiz?.questions.length as number
     if (questionId < maxCount - 1) {
       setQuestionId(questionId + 1)
+      dispatch(resetChecked())
     }
   }
 
@@ -60,9 +78,10 @@ function Quiz() {
     setQuestionId(0)
   }
 
-  // TODO: store answers to questions (redux?)
+  // TODO: use stored answers for completing quiz
 
-  console.log(id)
+  const pageAnswers = useAppSelector((state) => state.question.pageAnswers)
+  console.log(pageAnswers)
 
   return (
     <>
@@ -108,6 +127,9 @@ function Quiz() {
                   ></path>
                 </svg>
                 <h3 className="mb-5 text-lg font-normal text-gray-400 ">
+                  {pageAnswers?.map(
+                    (f) => f.answers == quiz?.questions[f.page].correctAnswers
+                  )}
                   Are you sure you want to submit?<br></br> You won't be able to
                   change your selection after.
                 </h3>
@@ -164,6 +186,7 @@ function Quiz() {
                 {answers?.map((answer, id) => (
                   <Question
                     id={id}
+                    page={questionId}
                     multiple={multiple ? true : false}
                     text={answer}
                   />

@@ -6,12 +6,15 @@ type Props = {
   multiple: boolean
   text: string
   id: number
+  page: number
 }
 
-function Question({ multiple, text, id }: Props) {
+function Question({ multiple, text, id, page }: Props) {
   const dispatch = useAppDispatch()
   const [checkedQ, setCheckedQ] = useState(false)
   const canBeChecked = useAppSelector((state) => state.question.checked)
+  const pageAnswers = useAppSelector((state) => state.question.pageAnswers)
+  const checked = useAppSelector((state) => state.question.checked)
 
   useEffect(() => {
     if (!canBeChecked?.includes(id)) {
@@ -27,7 +30,15 @@ function Question({ multiple, text, id }: Props) {
       setCheckedQ(true)
       dispatch(setChecked(id))
     }
+
+    console.log(checked)
   }
+
+  useEffect(() => {
+    if (pageAnswers?.filter((f) => f.page == page)[0]?.answers.includes(id)) {
+      setCheckedQ(true)
+    }
+  }, [page])
 
   return (
     <div
