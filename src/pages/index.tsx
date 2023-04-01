@@ -5,6 +5,8 @@ import Quizcard from '../components/Quizcard'
 import { Genre } from '../../types/types'
 import { useSession } from 'next-auth/react'
 import { IQuiz } from '../../types/types'
+import { useAppDispatch } from '../app/hooks'
+import { reset } from '../app/questionSlice'
 
 export async function getServerSideProps() {
   await dbConnect()
@@ -64,7 +66,10 @@ type Prop = {
 }
 
 export default function Home({ quizzes }: Prop) {
+  const dispatch = useAppDispatch()
   const { data: session } = useSession()
+
+  dispatch(reset())
 
   console.log(quizzes)
   return (

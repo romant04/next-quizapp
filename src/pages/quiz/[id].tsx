@@ -76,9 +76,32 @@ function Quiz() {
   function handleSureSubmit() {
     setModal(false)
     setQuestionId(0)
-  }
+    let correctAns = 0
 
-  // TODO: use stored answers for completing quiz
+    if (pageAnswers) {
+      for (let i of pageAnswers) {
+        for (let ans of i.answers) {
+          if (quiz?.questions[i.page].correctAnswers.includes(ans)) {
+            correctAns += 1
+          }
+        }
+      }
+    }
+
+    let maxScore = 0
+    quiz?.questions.map((x) => {
+      maxScore += x.correctAnswers.length
+    })
+
+    router.push({
+      pathname: '/quiz/summary',
+      query: {
+        score: (correctAns / maxScore) * 100,
+        quizId: quiz?._id,
+        quizName: quiz?.title,
+      },
+    })
+  }
 
   const pageAnswers = useAppSelector((state) => state.question.pageAnswers)
   console.log(pageAnswers)
@@ -93,26 +116,23 @@ function Quiz() {
                 onClick={() => setModal(false)}
                 type="button"
                 className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-                data-modal-hide="popup-modal"
               >
                 <svg
-                  aria-hidden="true"
                   className="w-5 h-5"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   ></path>
                 </svg>
                 <span className="sr-only">Close modal</span>
               </button>
               <div className="p-6 text-center">
                 <svg
-                  aria-hidden="true"
                   className="mx-auto mb-4 text-gray-200 w-14 h-14 "
                   fill="none"
                   stroke="currentColor"
@@ -120,9 +140,9 @@ function Quiz() {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   ></path>
                 </svg>
@@ -135,7 +155,6 @@ function Quiz() {
                 </h3>
                 <button
                   onClick={() => handleSureSubmit()}
-                  data-modal-hide="popup-modal"
                   type="button"
                   className="text-white bg-yellow-600 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:focus:ring-yellow-700 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
                 >
@@ -143,7 +162,6 @@ function Quiz() {
                 </button>
                 <button
                   onClick={() => setModal(false)}
-                  data-modal-hide="popup-modal"
                   type="button"
                   className="text-white bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-500 rounded-lg border border-gray-500 text-sm font-medium px-5 py-2.5 hover:text-gray-100 focus:z-10"
                 >
@@ -185,7 +203,7 @@ function Quiz() {
               <div className="flex flex-col gap-5 mt-5">
                 {answers?.map((answer, id) => (
                   <Question
-                    id={id}
+                    id={id + 1}
                     page={questionId}
                     multiple={multiple ? true : false}
                     text={answer}
